@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Latest Newsletter</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    iframe {
+      width: 100%;
+      height: 100vh;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    fetch('https://us3.campaign-archive.com/feed?u=3ecc2ccdd663e1c345572e0b8&id=9eae04638b')
+      .then(res => res.text())
+      .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+      .then(data => {
+        const latestLink = data.querySelector("item > link")?.textContent;
+        if (latestLink) {
+          const iframe = document.createElement("iframe");
+          iframe.src = latestLink;
+          document.body.appendChild(iframe);
+        } else {
+          document.body.innerHTML = "<p>No newsletter found.</p>";
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        document.body.innerHTML = "<p>Error loading newsletter.</p>";
+      });
+  </script>
+</body>
+</html>
